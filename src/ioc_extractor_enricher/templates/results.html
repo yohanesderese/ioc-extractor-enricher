@@ -1,0 +1,21 @@
+<section id="report" class="results" aria-label="Investigation results" {% if report and report.pending %}hx-get="/reports/{{ report.id }}/results?view={{ view }}&amp;verdict={{ verdict }}&amp;sort={{ sort }}&amp;order={{ order }}&amp;review={{ review }}" hx-trigger="every 1s" hx-target="this" hx-swap="outerHTML"{% endif %}>
+{% if error %}
+  <div class="error" role="alert">{{ error }}</div>
+{% elif report %}
+  <div class="results-heading"><div><p class="eyebrow">INVESTIGATION RESULTS</p><h2>{{ report.cards|length }} indicator{{ '' if report.cards|length == 1 else 's' }} extracted</h2></div><span class="{{ 'pending-label' if report.pending else 'complete-label' }}">{{ 'Enrichment in progress' if report.pending else 'Analysis complete' }}</span></div>
+  {% if report.pending %}<p class="subtle" role="status">Cards update as source lookups finish. Provider request limits can add waiting time.</p>{% endif %}
+  <form class="filters" action="/reports/{{ report.id }}/results" method="get" hx-get="/reports/{{ report.id }}/results" hx-target="#report" hx-swap="outerHTML" hx-trigger="change, submit">
+    <div><label for="view">View</label><select id="view" name="view"><option value="cards" {{ 'selected' if view == 'cards' }}>Cards</option><option value="table" {{ 'selected' if view == 'table' }}>Bulk table</option></select></div>
+    <div><label for="verdict">Verdict</label><select id="verdict" name="verdict">{% for value in ['all','malicious','suspicious','clean','unknown'] %}<option value="{{ value }}" {{ 'selected' if verdict == value }}>{{ value|capitalize }}</option>{% endfor %}</select></div>
+    <div><label for="sort">Sort by</label><select id="sort" name="sort">{% for value in ['score','value','type'] %}<option value="{{ value }}" {{ 'selected' if sort == value }}>{{ value|capitalize }}</option>{% endfor %}</select></div>
+    <div><label for="order">Order</label><select id="order" name="order"><option value="desc" {{ 'selected' if order == 'desc' }}>Descending</option><option value="asc" {{ 'selected' if order == 'asc' }}>Ascending</option></select></div>
+    <div><label for="review">Review</label><select id="review" name="review">{% for value, label in [('all','All indicators'),('flagged','False positives'),('unflagged','Not flagged')] %}<option value="{{ value }}" {{ 'selected' if review == value }}>{{ label }}</option>{% endfor %}</select></div>
+    <button class="button secondary" type="submit">Apply</button>
+  </form>
+  <p class="result-count">Showing {{ cards|length }} of {{ report.cards|length }} indicators</p>
+  {% if cards %}{% include 'table.html' if view == 'table' else 'cards.html' %}
+  {% else %}<div class="empty-state"><h3>{{ 'No indicators match these filters.' if report.cards else 'No valid indicators found.' }}</h3><p>{{ 'Try another verdict or review filter.' if report.cards else 'Try a domain, public IP, URL, hash, email, or CVE. Check the extraction options for excluded values.' }}</p></div>{% endif %}
+{% else %}
+  <div class="empty-state initial"><span aria-hidden="true">◎</span><h2>Your investigation starts here.</h2><p>Paste a report or upload text to see normalized indicators, source evidence, and explainable verdicts.</p></div>
+{% endif %}
+</section>

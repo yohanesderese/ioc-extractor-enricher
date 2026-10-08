@@ -1,0 +1,14 @@
+{% import 'components.html' as ui with context %}
+<div class="card-grid">
+{% for card in cards %}
+<article class="ioc-card {{ 'reviewed' if card.false_positive }}" data-card-id="{{ card.id }}">
+  <div class="card-top"><span class="type-label">{{ card.ioc.type|upper }}</span>{{ ui.badge(card) }}</div>
+  <h3 class="ioc-value">{{ card.ioc.value }}</h3>
+  <div class="score-row"><span class="score">{{ card.assessment.score if card.assessment.score is not none else '—' }}<span>/100</span></span><span class="subtle">{% if card.pending %}Source lookups queued{% elif card.evidence %}{{ card.assessment.known_sources }} of {{ card.assessment.supported_sources }} supported sources<br>provided a verdict{% else %}Extraction only<br>No source verdicts{% endif %}</span></div>
+  {% if card.false_positive %}<p class="review-note">Analyst flagged as a false positive. Source evidence and score are preserved.</p>{% endif %}
+  <div class="context"><span class="eyebrow">ORIGINAL CONTEXT</span><p>{{ card.ioc.context }}</p></div>
+  {{ ui.evidence(card) }}
+  <div class="card-actions">{{ ui.copy(card) }}{{ ui.review_button(card) }}</div>
+</article>
+{% endfor %}
+</div>

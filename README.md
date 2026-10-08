@@ -2,8 +2,8 @@
 
 Offline IOC extraction for SOC and CTI analysts. M1 provides a Python library and
 CLI. M2 adds an async enrichment library with VirusTotal, AbuseIPDB, and AlienVault
-OTX adapters. Verdict scoring, the web UI, and export integrations are planned
-for later milestones.
+OTX adapters. M3 adds explainable scoring and a local FastAPI/HTMX web workspace.
+Additional sources and export integrations follow in M4.
 
 ## Setup
 
@@ -18,6 +18,80 @@ python -m pip install -e '.[dev]'
 `tldextract` validates domains against its bundled public suffix snapshot without
 network requests. `httpx` handles asynchronous enrichment HTTP requests. `pytest`
 and `ruff` are development tools. No API keys are needed for extraction.
+
+The web app uses FastAPI for endpoints, Jinja2 for server-rendered pages,
+`python-multipart` for text uploads, and Uvicorn for the local server. HTMX 2.0.11
+is bundled with its license and served locally; no CDN is needed at runtime.
+
+## Web workspace (M3)
+
+```bash
+uvicorn ioc_extractor_enricher.app:app --host 127.0.0.1 --port 8000
+```
+
+Open `http://127.0.0.1:8000`. Paste text, upload a UTF-8 text file, or enter a URL
+indicator. Inputs may be combined. PDF/binary parsing and fetching report pages
+from URLs are not implemented; URL input analyzes the URL itself. Limits are
+1 MiB combined text and 50 unique indicators per report.
+
+Extraction runs locally by default. Select **Enrich with configured threat
+sources** to send extracted values to providers using the environment keys
+described below. Results appear immediately and poll while queued lookups run;
+the report job stops after five minutes, retaining completed cards and marking
+unfinished cards unknown with a timeout reason. A failed source cannot become a
+clean verdict. With no keys, sources are shown as disabled.
+
+Cards show the original context, source status and selected facts, report links,
+copy controls, and the score calculation. Switch to the bulk table and filter by
+verdict or review state; sort by score, value, or type. Unknown scores always sort
+after known scores. False-positive flags are reversible analyst annotations:
+they preserve provider evidence and the calculated score.
+
+Reports and review flags stay in process memory, expire after one hour, and are
+lost on restart. Evidence caching remains in SQLite. This milestone is for a
+single local server/worker, with up to 32 reports and 64 browser sessions; there
+is no login system or persistent investigation history. Browser session cookies
+scope reports, and mutations require CSRF tokens. Serve on localhost for local
+use. Public hosting and shared analyst access need a separate authentication and
+persistence design.
+
+The app factory supports injected engines, custom cache paths and optional
+whitelist files: `create_app(engine=None, cache_path="enrichment.db",
+whitelist_path=Path("config/whitelist.txt"))`. The default whitelist is empty.
+Provider keys are loaded at startup, so restart after changing the environment.
+
+### Score policy
+
+Default weights are VirusTotal 5, AbuseIPDB 3, and OTX 2. Custom sources default
+to weight 1. Known verdict points are malicious 100, suspicious 50, and clean 0.
+The score is the rounded weighted mean of known `ok` verdicts only. Unknown or
+unavailable sources do not contribute to the denominator; source coverage is
+shown alongside the score.
+
+A score of at least 75 is malicious. Any remaining positive source risk stays
+suspicious, even if a small contribution rounds to zero. A clean result requires
+known clean evidence without positive risk. With no eligible evidence, the score
+is `null` and the label is unknown (displayed as `—` in the UI). These are
+transparent project heuristics, not calibrated probabilities of compromise.
+`score_results(results, weights={"otx": 1})` overrides source weights; zero excludes
+a source. Reasons include every source's contribution/exclusion and evidence.
+
+### JSON API
+
+Start a session with `GET /` and retain its `ioc_session` cookie. Read the hidden
+form `csrf` value and send it as `X-CSRF-Token` for mutations.
+
+| Method | Endpoint | Purpose |
+| --- | --- | --- |
+| POST | `/api/analyze` | Create a report from `text`, `url`, and extraction options; `enrich` defaults to false |
+| GET | `/api/reports/{id}` | Poll evidence, assessment, pending state, and review flags |
+| POST | `/api/reports/{id}/cards/{card_id}/false-positive` | Set `{"false_positive": true}` or false |
+| GET | `/openapi.json` | API schema |
+
+Analysis returns HTTP 202 with the report ID, `pending`, and `cards`. Each card
+contains its IOC, evidence, assessment, and analyst annotation. HTML routes use
+the same reports and return fragments when `HX-Request: true`. Standalone Swagger
+and ReDoc pages are disabled to keep browser assets local.
 
 ## Usage
 

@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% block content %}
+<section class="intro">
+  <p class="eyebrow">THREAT INTELLIGENCE / IOC TRIAGE</p>
+  <h1>From scattered indicators<br>to clear evidence.</h1>
+  <p>Extract, normalize, and investigate indicators in one place. Every verdict comes with its reasons.</p>
+</section>
+<section class="input-panel" aria-labelledby="input-title">
+  <div class="panel-heading"><h2 id="input-title">Start an investigation</h2><span class="subtle">Nine IOC types · Defang aware</span></div>
+  <form action="/analyze" method="post" enctype="multipart/form-data" hx-post="/analyze" hx-encoding="multipart/form-data" hx-target="#report" hx-swap="outerHTML" hx-indicator="#loading" hx-disabled-elt="find button[type='submit']">
+    <input type="hidden" name="csrf" value="{{ csrf }}">
+    <label for="text">Report text or indicators</label>
+    <textarea id="text" name="text" rows="5" placeholder="Paste report text, defanged domains, IPs, URLs, hashes, emails, or CVEs…" maxlength="1048576"></textarea>
+    <div class="input-grid">
+      <div><label for="upload">Upload a text report</label><input id="upload" type="file" name="upload" accept=".txt,.log,.csv,.json,text/plain"><p class="field-hint">UTF-8 text · Up to 1 MiB</p></div>
+      <div><label for="url">URL indicator</label><input id="url" type="text" name="url" maxlength="8192" placeholder="https://example.com/path"><p class="field-hint">Analyzes the indicator; does not fetch the page.</p></div>
+    </div>
+    <details class="options"><summary>Extraction options</summary><div class="option-list">
+      <label><input type="checkbox" name="filter_noise" checked> Apply configured benign whitelist</label>
+      <label><input type="checkbox" name="include_reserved_ips"> Include private and reserved IPs</label>
+      <label><input type="checkbox" name="include_zero_hashes"> Include all-zero hashes</label>
+    </div></details>
+    <div class="submit-row">
+      <label class="enrichment-option"><input type="checkbox" name="enrich"> Enrich with configured threat sources <span>Selected indicators are sent to providers.</span></label>
+      <button type="submit" class="button primary">Analyze indicators <span aria-hidden="true">→</span></button>
+    </div>
+    <p id="loading" class="htmx-indicator" role="status">Extracting indicators…</p>
+    <p class="field-hint">Up to {{ max_iocs }} unique indicators per report. With no source evidence, the verdict remains unknown.</p>
+  </form>
+</section>
+{% include 'results.html' %}
+{% endblock %}
