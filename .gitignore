@@ -211,6 +211,15 @@ tempCodeRunnerFile.py
 # PyPI configuration file
 .pypirc
 
+# Local secrets and enrichment history
+.env.*
+!.env.example
+*.db
+*.db-*
+*.sqlite
+*.sqlite3
+*.sqlite3-*
+
 # Marimo
 marimo/_static/
 marimo/_lsp/
