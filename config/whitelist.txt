@@ -1,0 +1,2 @@
+# Optional benign domains/IPs, one per line. Subdomains are also excluded.
+# Add entries appropriate to your investigation; this file starts empty.
