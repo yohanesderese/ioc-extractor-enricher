@@ -13,6 +13,22 @@
     <button class="button secondary" type="submit">Apply</button>
   </form>
   <p class="result-count">Showing {{ cards|length }} of {{ report.cards|length }} indicators</p>
+  {% if not report.pending %}
+  <div class="export-actions"><span>Download displayed indicators:</span>
+    {% for format, label in [('csv','CSV'),('json','JSON'),('stix','STIX 2.1')] %}
+    <a class="button secondary" href="/reports/{{ report.id }}/export/{{ format }}?verdict={{ verdict }}&amp;sort={{ sort }}&amp;order={{ order }}&amp;review={{ review }}">{{ label }}</a>
+    {% endfor %}
+  </div>
+  {% if report.misp_result %}
+    <p role="status">{{ report.misp_result.message }} {% if report.misp_result.link|safe_url %}<a href="{{ report.misp_result.link|safe_url }}" target="_blank" rel="noopener noreferrer">View MISP event</a>{% endif %} This attempt is retained; further clicks do not send another event. Later review changes apply locally.</p>
+  {% elif misp_enabled and report.cards %}
+    <form class="misp-form" action="/reports/{{ report.id }}/misp?view={{ view }}&amp;verdict={{ verdict }}&amp;sort={{ sort }}&amp;order={{ order }}&amp;review={{ review }}" method="post" hx-post="/reports/{{ report.id }}/misp?view={{ view }}&amp;verdict={{ verdict }}&amp;sort={{ sort }}&amp;order={{ order }}&amp;review={{ review }}" hx-target="#report" hx-swap="outerHTML">
+      <input type="hidden" name="csrf" value="{{ csrf }}">
+      <label><input type="checkbox" name="confirm" required> Send all unflagged indicator values and scores in this report to the configured MISP as an unpublished organization-only event.</label>
+      <button class="button secondary" type="submit">Create MISP event</button>
+    </form>
+  {% else %}<p class="subtle">MISP push is disabled. Configure MISP_URL and MISP_API_KEY on the server to enable it.</p>{% endif %}
+  {% endif %}
   {% if cards %}{% include 'table.html' if view == 'table' else 'cards.html' %}
   {% else %}<div class="empty-state"><h3>{{ 'No indicators match these filters.' if report.cards else 'No valid indicators found.' }}</h3><p>{{ 'Try another verdict or review filter.' if report.cards else 'Try a domain, public IP, URL, hash, email, or CVE. Check the extraction options for excluded values.' }}</p></div>{% endif %}
 {% else %}

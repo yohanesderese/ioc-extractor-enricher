@@ -10,6 +10,7 @@ requires-python = ">=3.11"
 dependencies = [
     "tldextract>=5.1,<6", "httpx>=0.27,<1", "fastapi>=0.115,<1",
     "jinja2>=3.1,<4", "python-multipart>=0.0.20,<1", "uvicorn>=0.30,<1",
+    "stix2>=3.0,<4",
 ]
 
 [project.optional-dependencies]
@@ -22,7 +23,7 @@ ioc-extract = "ioc_extractor_enricher.cli:main"
 where = ["src"]
 
 [tool.setuptools.package-data]
-ioc_extractor_enricher = ["templates/*.html", "static/*"]
+ioc_extractor_enricher = ["templates/*.html", "static/*", "enrichment/data/*.json"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
