@@ -123,6 +123,7 @@ class HTTPPlugin(ABC):
     env_key: str
     auth_header: str
     types: frozenset[IOCType]
+    requires_key: bool = True
 
     def __init__(self, client: httpx.AsyncClient, *, timeout: float = 10.0) -> None:
         """Read only this source's key from the environment; never load .env files."""
@@ -130,7 +131,7 @@ class HTTPPlugin(ABC):
             raise ValueError("Timeout must be positive and finite")
         self.client = client
         self.timeout = timeout
-        self._key = os.environ.get(self.env_key, "").strip()
+        self._key = os.environ.get(self.env_key, "").strip() if self.requires_key else ""
 
     def supports(self, ioc_type: IOCType) -> bool:
         """Check the source's explicitly supported types."""
@@ -139,7 +140,24 @@ class HTTPPlugin(ABC):
     @property
     def configured(self) -> bool:
         """Whether an environment key is present rather than an example placeholder."""
-        return bool(self._key and self._key != "...")
+        return not self.requires_key or bool(self._key and self._key != "...")
+
+    async def request(self, ioc: IOC) -> httpx.Response:
+        """Perform a fixed-endpoint GET; POST lookup adapters override this method."""
+        url, params = self.endpoint(ioc)
+        return await self.client.get(
+            url,
+            params=params,
+            headers=self.headers(),
+            timeout=self.timeout,
+            follow_redirects=False,
+        )
+
+    def headers(self) -> dict[str, str]:
+        """Omit authentication entirely for public providers."""
+        return {"Accept": "application/json"} | (
+            {self.auth_header: self._key} if self.requires_key else {}
+        )
 
     @abstractmethod
     def endpoint(self, ioc: IOC) -> tuple[str, dict[str, str]]:
@@ -160,16 +178,9 @@ class HTTPPlugin(ABC):
         if not self.configured:
             return failure("disabled", "Source API key is not configured.")
         try:
-            url, params = self.endpoint(ioc)
             # Never forward a key across redirects, even with a redirect-enabled client.
             async with asyncio.timeout(self.timeout):
-                response = await self.client.get(
-                    url,
-                    params=params,
-                    headers={self.auth_header: self._key, "Accept": "application/json"},
-                    timeout=self.timeout,
-                    follow_redirects=False,
-                )
+                response = await self.request(ioc)
             if response.status_code == 404:
                 return failure("not_found", "Source has no report for this indicator.")
             if response.status_code == 429:

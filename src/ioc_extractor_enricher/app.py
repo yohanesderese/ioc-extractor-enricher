@@ -22,8 +22,21 @@ from starlette.datastructures import UploadFile
 from starlette.types import ASGIApp, Message, Receive, Scope, Send
 
 from .cache import SQLiteCache
-from .enrichment import OTX, AbuseIPDB, EnrichmentEngine, EnrichmentResult, VirusTotal
+from .enrichment import (
+    OTX,
+    RDAP,
+    AbuseIPDB,
+    EnrichmentEngine,
+    EnrichmentResult,
+    GreyNoise,
+    InternetDB,
+    MalwareBazaar,
+    URLhaus,
+    VirusTotal,
+)
+from .exports import ExportItem, export_csv, export_json, export_stix
 from .extractor import extract
+from .misp import MISPClient, MISPResult
 from .models import IOC, ExtractionOptions
 from .noise_filter import load_whitelist
 from .refang import refang
@@ -112,6 +125,9 @@ class Report:
     cards: list[Card]
     created: float = field(default_factory=time.monotonic)
 
+    misp_result: MISPResult | None = None
+    misp_lock: asyncio.Lock = field(default_factory=asyncio.Lock)
+
     @property
     def pending(self) -> bool:
         """Whether any cards still await provider evidence."""
@@ -137,11 +153,19 @@ class ReviewInput(BaseModel):
     false_positive: bool
 
 
+class PushInput(BaseModel):
+    """Explicit confirmation independent of CSRF protection."""
+
+    model_config = ConfigDict(extra="forbid")
+    confirm: bool = False
+
+
 def create_app(
     engine: EnrichmentEngine | None = None,
     *,
     cache_path: str | Path = "enrichment.db",
     whitelist_path: Path | None = None,
+    misp: MISPClient | None = None,
 ) -> FastAPI:
     """Build an isolated app; tests inject an engine and never use live providers."""
     templates = Jinja2Templates(directory=str(ASSETS / "templates"))
@@ -163,6 +187,7 @@ def create_app(
     @asynccontextmanager
     async def lifespan(application: FastAPI) -> AsyncIterator[None]:
         """Create shared clients at startup and cancel outstanding work on shutdown."""
+        application.state.misp = misp
         try:
             if engine is not None:
                 application.state.engine = engine
@@ -170,9 +195,19 @@ def create_app(
             else:
                 async with httpx.AsyncClient() as client, SQLiteCache(cache_path) as cache:
                     application.state.engine = EnrichmentEngine(
-                        [VirusTotal(client), AbuseIPDB(client), OTX(client)],
+                        [
+                            VirusTotal(client),
+                            AbuseIPDB(client),
+                            OTX(client),
+                            URLhaus(client),
+                            MalwareBazaar(client),
+                            InternetDB(client),
+                            GreyNoise(client),
+                            RDAP(client),
+                        ],
                         cache,
                     )
+                    application.state.misp = misp or MISPClient(client)
                     try:
                         yield
                     finally:
@@ -323,19 +358,14 @@ def create_app(
             jobs[report.id] = asyncio.create_task(process(report))
         return report
 
-    def render(
-        request: Request,
-        report: Report | None = None,
-        *,
-        view: View = "cards",
-        verdict: VerdictFilter = "all",
-        sort: Sort = "score",
-        order: Order = "desc",
-        review: ReviewFilter = "all",
-        error: str | None = None,
-    ) -> HTMLResponse:
-        """Render the full page or a safe HTMX fragment using current report filters."""
-        _, session = session_for(request)
+    def select_cards(
+        report: Report | None,
+        verdict: VerdictFilter,
+        sort: Sort,
+        order: Order,
+        review: ReviewFilter,
+    ) -> list[Card]:
+        """Share display ordering and filters with downloads."""
         cards = list(report.cards) if report else []
         if verdict != "all":
             cards = [card for card in cards if card.assessment.verdict == verdict]
@@ -352,6 +382,22 @@ def create_app(
             )
         else:
             cards.sort(key=lambda card: getattr(card.ioc, sort), reverse=order == "desc")
+        return cards
+
+    def render(
+        request: Request,
+        report: Report | None = None,
+        *,
+        view: View = "cards",
+        verdict: VerdictFilter = "all",
+        sort: Sort = "score",
+        order: Order = "desc",
+        review: ReviewFilter = "all",
+        error: str | None = None,
+    ) -> HTMLResponse:
+        """Render the full page or a safe HTMX fragment using current report filters."""
+        _, session = session_for(request)
+        cards = select_cards(report, verdict, sort, order, review)
         context = {
             "report": report,
             "cards": cards,
@@ -363,6 +409,7 @@ def create_app(
             "review": review,
             "error": error,
             "max_iocs": MAX_IOCS,
+            "misp_enabled": bool(application.state.misp and application.state.misp.configured),
         }
         name = "results.html" if request.headers.get("HX-Request") == "true" else "index.html"
         return templates.TemplateResponse(request=request, name=name, context=context)
@@ -373,6 +420,7 @@ def create_app(
             "id": report.id,
             "pending": report.pending,
             "cards": [asdict(card) for card in report.cards],
+            "misp": asdict(report.misp_result) if report.misp_result else None,
         }
 
     def review_card(report: Report, card_id: int, flagged: bool) -> Card:
@@ -517,6 +565,82 @@ def create_app(
         """Set a review state without changing the source verdict or score."""
         verify_csrf(request, request.headers.get("X-CSRF-Token"))
         return asdict(review_card(owned_report(request, report_id), card_id, data.false_positive))
+
+    def snapshot(cards: list[Card]) -> list[ExportItem]:
+        """Copy completed report data without server ownership and locks."""
+        return [ExportItem(c.ioc, c.assessment, tuple(c.evidence), c.false_positive) for c in cards]
+
+    @application.get("/reports/{report_id}/export/{format}")
+    async def download(
+        request: Request,
+        report_id: str,
+        format: Literal["csv", "json", "stix"],
+        verdict: VerdictFilter = "all",
+        sort: Sort = "score",
+        order: Order = "desc",
+        review: ReviewFilter = "all",
+    ) -> Response:
+        """Download completed cards using current display filters."""
+        report = owned_report(request, report_id)
+        if report.pending:
+            raise HTTPException(409, "Wait for enrichment to finish before exporting.")
+        items = snapshot(select_cards(report, verdict, sort, order, review))
+        exporters = {
+            "csv": (export_csv, "text/csv", "csv"),
+            "json": (export_json, "application/json", "json"),
+            "stix": (export_stix, "application/stix+json", "stix.json"),
+        }
+        exporter, media_type, extension = exporters[format]
+        return Response(
+            exporter(items),
+            media_type=media_type,
+            headers={
+                "Content-Disposition": f'attachment; filename="ioc-report-{report.id}.{extension}"'
+            },
+        )
+
+    async def push_report(report: Report, confirm: bool) -> MISPResult:
+        """Retain outcomes and serialize attempts to prevent repeated remote writes."""
+        if not confirm:
+            raise HTTPException(422, "Confirm creation of a private unpublished MISP event.")
+        if report.pending:
+            raise HTTPException(409, "Wait for enrichment to finish before pushing.")
+        client = application.state.misp
+        if client is None or not client.configured:
+            raise HTTPException(409, "MISP is not configured.")
+        async with report.misp_lock:
+            if report.misp_result is None:
+                report.misp_result = MISPResult(
+                    "pending",
+                    "MISP creation is in progress or uncertain. Check MISP before resending.",
+                )
+                report.misp_result = await client.push(snapshot(report.cards), report.id)
+            return report.misp_result
+
+    @application.post("/api/reports/{report_id}/misp")
+    async def push_json(request: Request, report_id: str, data: PushInput) -> dict:
+        """Require both a session token and explicit confirmation."""
+        verify_csrf(request, request.headers.get("X-CSRF-Token"))
+        return asdict(await push_report(owned_report(request, report_id), data.confirm))
+
+    @application.post("/reports/{report_id}/misp", response_class=HTMLResponse)
+    async def push_form(
+        request: Request,
+        report_id: str,
+        view: View = "cards",
+        verdict: VerdictFilter = "all",
+        sort: Sort = "score",
+        order: Order = "desc",
+        review: ReviewFilter = "all",
+    ) -> Response:
+        """Only create an event after submitting the confirmation form."""
+        async with request.form(max_files=0, max_fields=2) as form:
+            verify_csrf(request, str(form.get("csrf", "")))
+            report = owned_report(request, report_id)
+            await push_report(report, form.get("confirm") == "on")
+        return render(
+            request, report, view=view, verdict=verdict, sort=sort, order=order, review=review
+        )
 
     return application
 

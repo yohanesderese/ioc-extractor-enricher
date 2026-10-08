@@ -6,7 +6,16 @@ from dataclasses import dataclass
 
 from .enrichment.base import EnrichmentResult, Status, Verdict
 
-DEFAULT_WEIGHTS = {"virustotal": 5.0, "abuseipdb": 3.0, "otx": 2.0}
+DEFAULT_WEIGHTS = {
+    "virustotal": 5.0,
+    "abuseipdb": 3.0,
+    "otx": 2.0,
+    "urlhaus": 5.0,
+    "malwarebazaar": 5.0,
+    "greynoise": 2.0,
+    "internetdb": 1.0,
+    "rdap": 1.0,
+}
 POINTS: dict[Verdict, int] = {"malicious": 100, "suspicious": 50, "clean": 0}
 
 

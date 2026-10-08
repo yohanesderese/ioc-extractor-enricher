@@ -286,11 +286,18 @@ def test_whitelist_option(tmp_path: Path, source: SyntheticSource) -> None:
 
 def test_default_lifespan_without_keys(tmp_path: Path, monkeypatch: pytest.MonkeyPatch) -> None:
     """Default startup uses environment-only adapters and closes its SQLite cache."""
-    for key in ("VT_API_KEY", "ABUSEIPDB_API_KEY", "OTX_API_KEY"):
+    for key in (
+        "VT_API_KEY",
+        "ABUSEIPDB_API_KEY",
+        "OTX_API_KEY",
+        "ABUSECH_AUTH_KEY",
+        "GREYNOISE_API_KEY",
+        "MISP_API_KEY",
+    ):
         monkeypatch.setenv(key, "")
 
     async def no_network(*args: object, **kwargs: object) -> httpx.Response:
-        raise AssertionError("No-key app attempted a live request")
+        return httpx.Response(404, json={"detail": "Synthetic no record"})
 
     monkeypatch.setattr(httpx.AsyncHTTPTransport, "handle_async_request", no_network)
     path = tmp_path / "cache.db"
@@ -298,7 +305,10 @@ def test_default_lifespan_without_keys(tmp_path: Path, monkeypatch: pytest.Monke
         report = analyze(client, "example.com", enrich=True)
         done = completed(client, report["id"])
         assert done["cards"][0]["assessment"]["verdict"] == "unknown"
-        assert all(r["status"] in {"disabled", "unsupported"} for r in done["cards"][0]["evidence"])
+        assert all(
+            r["status"] in {"disabled", "unsupported", "not_found"}
+            for r in done["cards"][0]["evidence"]
+        )
         assert client.cookies.get(COOKIE)
     assert path.exists()
 
