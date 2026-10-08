@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="htmx-config" content='{"allowEval":false,"allowScriptTags":false,"includeIndicatorStyles":false,"historyCacheSize":0}'>
+  <title>IOC Desk · Extractor &amp; Enricher</title>
+  <link rel="stylesheet" href="{{ url_for('static', path='app.css') }}">
+  <script src="{{ url_for('static', path='htmx.min.js') }}" defer></script>
+  <script src="{{ url_for('static', path='app.js') }}" defer></script>
+</head>
+<body hx-history="false">
+  <header class="site-header">
+    <a class="brand" href="/" aria-label="IOC Desk home"><span class="brand-mark" aria-hidden="true">◎</span> IOC<span>Desk</span></a>
+    <span class="local-label"><span class="status-dot" aria-hidden="true"></span> Analyst workspace</span>
+  </header>
+  <main>{% block content %}{% endblock %}</main>
+  <footer>Explainable evidence. Analyst judgment. <span>Reports and review flags expire after one hour.</span></footer>
+  <p id="copy-status" class="toast" role="status" aria-live="polite"></p>
+</body>
+</html>

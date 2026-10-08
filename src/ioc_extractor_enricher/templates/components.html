@@ -1,0 +1,23 @@
+{% macro badge(card) %}<span class="badge {{ card.assessment.verdict }}">{{ 'Pending' if card.pending else card.assessment.verdict|capitalize }}</span>{% endmacro %}
+{% macro copy(card) %}<button class="button small secondary" type="button" data-copy="{{ card.ioc.value }}" aria-label="Copy {{ card.ioc.value }}">Copy</button>{% endmacro %}
+{% macro review_button(card) %}
+<form action="/reports/{{ report.id }}/cards/{{ card.id }}/false-positive?view={{ view }}&amp;verdict={{ verdict }}&amp;sort={{ sort }}&amp;order={{ order }}&amp;review={{ review }}" method="post" hx-post="/reports/{{ report.id }}/cards/{{ card.id }}/false-positive?view={{ view }}&amp;verdict={{ verdict }}&amp;sort={{ sort }}&amp;order={{ order }}&amp;review={{ review }}" hx-target="#report" hx-swap="outerHTML">
+  <input type="hidden" name="csrf" value="{{ csrf }}"><input type="hidden" name="false_positive" value="{{ 'false' if card.false_positive else 'true' }}">
+  <button class="button small {{ 'flagged-button' if card.false_positive else 'secondary' }}" type="submit" aria-pressed="{{ 'true' if card.false_positive else 'false' }}">{{ 'Clear false positive' if card.false_positive else 'Flag false positive' }}</button>
+</form>
+{% endmacro %}
+{% macro evidence(card) %}
+<details class="evidence" data-evidence="{{ card.id }}"><summary>Source evidence &amp; score explanation</summary>
+  <div class="source-list">
+  {% for source in card.evidence %}
+    <div class="source"><div class="source-heading"><strong>{{ source.source }}</strong><span class="subtle">{{ source.status|replace('_',' ') }}{% if source.cached %} · cached{% endif %}</span></div>
+      <span class="badge {{ source.verdict }}">{{ source.verdict|capitalize }}</span>
+      {% for reason in source.reasons %}<p>{{ reason }}</p>{% endfor %}
+      {% if source.facts %}<dl class="facts">{% for key, value in source.facts.items() %}<div><dt>{{ key }}</dt><dd>{{ value if value is not none else 'Unknown' }}</dd></div>{% endfor %}</dl>{% endif %}
+      {% if source.link|safe_url %}<a class="source-link" href="{{ source.link|safe_url }}" target="_blank" rel="noopener noreferrer">Open source report ↗</a>{% endif %}
+    </div>
+  {% else %}<p class="subtle">{{ 'Waiting for source lookups.' if card.pending else 'No source evidence. Select enrichment when analyzing to query configured sources.' }}</p>{% endfor %}
+  </div>
+  <h4>Why this score?</h4><ul class="reasons">{% for reason in card.assessment.reasons %}<li>{{ reason }}</li>{% endfor %}</ul>
+</details>
+{% endmacro %}
