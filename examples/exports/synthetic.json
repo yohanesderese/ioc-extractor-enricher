@@ -1,0 +1,557 @@
+[
+  {
+    "ioc": {
+      "type": "url",
+      "value": "https://alpha.example.com/download",
+      "context": "The simulated alert references alpha[.]example[.]com and hxxps[:]//alpha[.]example[.]com/download."
+    },
+    "assessment": {
+      "score": null,
+      "verdict": "unknown",
+      "reasons": [
+        "demo: Excluded: ok, verdict unknown; no known verdict.",
+        "demo: SIMULATED evidence for UI demonstration only; no provider was queried.",
+        "No source supplied a known weighted verdict; the score is unknown."
+      ],
+      "contributions": [
+        {
+          "source": "demo",
+          "status": "ok",
+          "verdict": "unknown",
+          "weight": 1.0,
+          "points": null,
+          "explanation": "Excluded: ok, verdict unknown; no known verdict."
+        }
+      ],
+      "known_sources": 0,
+      "supported_sources": 1
+    },
+    "evidence": [
+      {
+        "source": "demo",
+        "status": "ok",
+        "verdict": "unknown",
+        "reasons": [
+          "SIMULATED evidence for UI demonstration only; no provider was queried."
+        ],
+        "facts": {
+          "synthetic": true
+        },
+        "link": null,
+        "observed_at": 1767225600.0,
+        "cached": false,
+        "retry_after": null
+      }
+    ],
+    "false_positive": false
+  },
+  {
+    "ioc": {
+      "type": "domain",
+      "value": "alpha.example.com",
+      "context": "The simulated alert references alpha[.]example[.]com and hxxps[:]//alpha[.]example[.]com/download."
+    },
+    "assessment": {
+      "score": 100,
+      "verdict": "malicious",
+      "reasons": [
+        "demo: Included: malicious = 100 points, weight 1.",
+        "demo: SIMULATED evidence for UI demonstration only; no provider was queried.",
+        "Weighted mean of 1 known source verdicts: 100/100.",
+        "Malicious threshold: 75. Any remaining positive risk stays suspicious."
+      ],
+      "contributions": [
+        {
+          "source": "demo",
+          "status": "ok",
+          "verdict": "malicious",
+          "weight": 1.0,
+          "points": 100,
+          "explanation": "Included: malicious = 100 points, weight 1."
+        }
+      ],
+      "known_sources": 1,
+      "supported_sources": 1
+    },
+    "evidence": [
+      {
+        "source": "demo",
+        "status": "ok",
+        "verdict": "malicious",
+        "reasons": [
+          "SIMULATED evidence for UI demonstration only; no provider was queried."
+        ],
+        "facts": {
+          "synthetic": true
+        },
+        "link": null,
+        "observed_at": 1767225600.0,
+        "cached": false,
+        "retry_after": null
+      }
+    ],
+    "false_positive": false
+  },
+  {
+    "ioc": {
+      "type": "domain",
+      "value": "gamma.example.com",
+      "context": "A second simulated signal references gamma[.]example[.]com."
+    },
+    "assessment": {
+      "score": 50,
+      "verdict": "suspicious",
+      "reasons": [
+        "demo: Included: suspicious = 50 points, weight 1.",
+        "demo: SIMULATED evidence for UI demonstration only; no provider was queried.",
+        "Weighted mean of 1 known source verdicts: 50/100.",
+        "Malicious threshold: 75. Any remaining positive risk stays suspicious."
+      ],
+      "contributions": [
+        {
+          "source": "demo",
+          "status": "ok",
+          "verdict": "suspicious",
+          "weight": 1.0,
+          "points": 50,
+          "explanation": "Included: suspicious = 50 points, weight 1."
+        }
+      ],
+      "known_sources": 1,
+      "supported_sources": 1
+    },
+    "evidence": [
+      {
+        "source": "demo",
+        "status": "ok",
+        "verdict": "suspicious",
+        "reasons": [
+          "SIMULATED evidence for UI demonstration only; no provider was queried."
+        ],
+        "facts": {
+          "synthetic": true
+        },
+        "link": null,
+        "observed_at": 1767225600.0,
+        "cached": false,
+        "retry_after": null
+      }
+    ],
+    "false_positive": false
+  },
+  {
+    "ioc": {
+      "type": "domain",
+      "value": "beta.example.org",
+      "context": "The exercise labels beta[.]example[.]org as benign solely to demonstrate a clean card."
+    },
+    "assessment": {
+      "score": 0,
+      "verdict": "clean",
+      "reasons": [
+        "demo: Included: clean = 0 points, weight 1.",
+        "demo: SIMULATED evidence for UI demonstration only; no provider was queried.",
+        "Weighted mean of 1 known source verdicts: 0/100.",
+        "Malicious threshold: 75. Any remaining positive risk stays suspicious."
+      ],
+      "contributions": [
+        {
+          "source": "demo",
+          "status": "ok",
+          "verdict": "clean",
+          "weight": 1.0,
+          "points": 0,
+          "explanation": "Included: clean = 0 points, weight 1."
+        }
+      ],
+      "known_sources": 1,
+      "supported_sources": 1
+    },
+    "evidence": [
+      {
+        "source": "demo",
+        "status": "ok",
+        "verdict": "clean",
+        "reasons": [
+          "SIMULATED evidence for UI demonstration only; no provider was queried."
+        ],
+        "facts": {
+          "synthetic": true
+        },
+        "link": null,
+        "observed_at": 1767225600.0,
+        "cached": false,
+        "retry_after": null
+      }
+    ],
+    "false_positive": false
+  },
+  {
+    "ioc": {
+      "type": "email",
+      "value": "analyst@example.net",
+      "context": "A contact artifact is analyst[at]example[.]net."
+    },
+    "assessment": {
+      "score": null,
+      "verdict": "unknown",
+      "reasons": [
+        "demo: Excluded: ok, verdict unknown; no known verdict.",
+        "demo: SIMULATED evidence for UI demonstration only; no provider was queried.",
+        "No source supplied a known weighted verdict; the score is unknown."
+      ],
+      "contributions": [
+        {
+          "source": "demo",
+          "status": "ok",
+          "verdict": "unknown",
+          "weight": 1.0,
+          "points": null,
+          "explanation": "Excluded: ok, verdict unknown; no known verdict."
+        }
+      ],
+      "known_sources": 0,
+      "supported_sources": 1
+    },
+    "evidence": [
+      {
+        "source": "demo",
+        "status": "ok",
+        "verdict": "unknown",
+        "reasons": [
+          "SIMULATED evidence for UI demonstration only; no provider was queried."
+        ],
+        "facts": {
+          "synthetic": true
+        },
+        "link": null,
+        "observed_at": 1767225600.0,
+        "cached": false,
+        "retry_after": null
+      }
+    ],
+    "false_positive": false
+  },
+  {
+    "ioc": {
+      "type": "domain",
+      "value": "example.net",
+      "context": "A contact artifact is analyst[at]example[.]net."
+    },
+    "assessment": {
+      "score": null,
+      "verdict": "unknown",
+      "reasons": [
+        "demo: Excluded: ok, verdict unknown; no known verdict.",
+        "demo: SIMULATED evidence for UI demonstration only; no provider was queried.",
+        "No source supplied a known weighted verdict; the score is unknown."
+      ],
+      "contributions": [
+        {
+          "source": "demo",
+          "status": "ok",
+          "verdict": "unknown",
+          "weight": 1.0,
+          "points": null,
+          "explanation": "Excluded: ok, verdict unknown; no known verdict."
+        }
+      ],
+      "known_sources": 0,
+      "supported_sources": 1
+    },
+    "evidence": [
+      {
+        "source": "demo",
+        "status": "ok",
+        "verdict": "unknown",
+        "reasons": [
+          "SIMULATED evidence for UI demonstration only; no provider was queried."
+        ],
+        "facts": {
+          "synthetic": true
+        },
+        "link": null,
+        "observed_at": 1767225600.0,
+        "cached": false,
+        "retry_after": null
+      }
+    ],
+    "false_positive": false
+  },
+  {
+    "ioc": {
+      "type": "ipv6",
+      "value": "2001:db8::10",
+      "context": "Documentation addresses 192.0.2.10 and 2001:db8::10 are included only when reserved IPs are enabled."
+    },
+    "assessment": {
+      "score": null,
+      "verdict": "unknown",
+      "reasons": [
+        "demo: Excluded: ok, verdict unknown; no known verdict.",
+        "demo: SIMULATED evidence for UI demonstration only; no provider was queried.",
+        "No source supplied a known weighted verdict; the score is unknown."
+      ],
+      "contributions": [
+        {
+          "source": "demo",
+          "status": "ok",
+          "verdict": "unknown",
+          "weight": 1.0,
+          "points": null,
+          "explanation": "Excluded: ok, verdict unknown; no known verdict."
+        }
+      ],
+      "known_sources": 0,
+      "supported_sources": 1
+    },
+    "evidence": [
+      {
+        "source": "demo",
+        "status": "ok",
+        "verdict": "unknown",
+        "reasons": [
+          "SIMULATED evidence for UI demonstration only; no provider was queried."
+        ],
+        "facts": {
+          "synthetic": true
+        },
+        "link": null,
+        "observed_at": 1767225600.0,
+        "cached": false,
+        "retry_after": null
+      }
+    ],
+    "false_positive": false
+  },
+  {
+    "ioc": {
+      "type": "ipv4",
+      "value": "192.0.2.10",
+      "context": "Documentation addresses 192.0.2.10 and 2001:db8::10 are included only when reserved IPs are enabled."
+    },
+    "assessment": {
+      "score": null,
+      "verdict": "unknown",
+      "reasons": [
+        "demo: Excluded: ok, verdict unknown; no known verdict.",
+        "demo: SIMULATED evidence for UI demonstration only; no provider was queried.",
+        "No source supplied a known weighted verdict; the score is unknown."
+      ],
+      "contributions": [
+        {
+          "source": "demo",
+          "status": "ok",
+          "verdict": "unknown",
+          "weight": 1.0,
+          "points": null,
+          "explanation": "Excluded: ok, verdict unknown; no known verdict."
+        }
+      ],
+      "known_sources": 0,
+      "supported_sources": 1
+    },
+    "evidence": [
+      {
+        "source": "demo",
+        "status": "ok",
+        "verdict": "unknown",
+        "reasons": [
+          "SIMULATED evidence for UI demonstration only; no provider was queried."
+        ],
+        "facts": {
+          "synthetic": true
+        },
+        "link": null,
+        "observed_at": 1767225600.0,
+        "cached": false,
+        "retry_after": null
+      }
+    ],
+    "false_positive": false
+  },
+  {
+    "ioc": {
+      "type": "md5",
+      "value": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "context": "Synthetic MD5: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "assessment": {
+      "score": null,
+      "verdict": "unknown",
+      "reasons": [
+        "demo: Excluded: ok, verdict unknown; no known verdict.",
+        "demo: SIMULATED evidence for UI demonstration only; no provider was queried.",
+        "No source supplied a known weighted verdict; the score is unknown."
+      ],
+      "contributions": [
+        {
+          "source": "demo",
+          "status": "ok",
+          "verdict": "unknown",
+          "weight": 1.0,
+          "points": null,
+          "explanation": "Excluded: ok, verdict unknown; no known verdict."
+        }
+      ],
+      "known_sources": 0,
+      "supported_sources": 1
+    },
+    "evidence": [
+      {
+        "source": "demo",
+        "status": "ok",
+        "verdict": "unknown",
+        "reasons": [
+          "SIMULATED evidence for UI demonstration only; no provider was queried."
+        ],
+        "facts": {
+          "synthetic": true
+        },
+        "link": null,
+        "observed_at": 1767225600.0,
+        "cached": false,
+        "retry_after": null
+      }
+    ],
+    "false_positive": false
+  },
+  {
+    "ioc": {
+      "type": "sha1",
+      "value": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "context": "Synthetic SHA1: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    },
+    "assessment": {
+      "score": null,
+      "verdict": "unknown",
+      "reasons": [
+        "demo: Excluded: ok, verdict unknown; no known verdict.",
+        "demo: SIMULATED evidence for UI demonstration only; no provider was queried.",
+        "No source supplied a known weighted verdict; the score is unknown."
+      ],
+      "contributions": [
+        {
+          "source": "demo",
+          "status": "ok",
+          "verdict": "unknown",
+          "weight": 1.0,
+          "points": null,
+          "explanation": "Excluded: ok, verdict unknown; no known verdict."
+        }
+      ],
+      "known_sources": 0,
+      "supported_sources": 1
+    },
+    "evidence": [
+      {
+        "source": "demo",
+        "status": "ok",
+        "verdict": "unknown",
+        "reasons": [
+          "SIMULATED evidence for UI demonstration only; no provider was queried."
+        ],
+        "facts": {
+          "synthetic": true
+        },
+        "link": null,
+        "observed_at": 1767225600.0,
+        "cached": false,
+        "retry_after": null
+      }
+    ],
+    "false_positive": false
+  },
+  {
+    "ioc": {
+      "type": "sha256",
+      "value": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "context": "Synthetic SHA256: cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+    },
+    "assessment": {
+      "score": null,
+      "verdict": "unknown",
+      "reasons": [
+        "demo: Excluded: ok, verdict unknown; no known verdict.",
+        "demo: SIMULATED evidence for UI demonstration only; no provider was queried.",
+        "No source supplied a known weighted verdict; the score is unknown."
+      ],
+      "contributions": [
+        {
+          "source": "demo",
+          "status": "ok",
+          "verdict": "unknown",
+          "weight": 1.0,
+          "points": null,
+          "explanation": "Excluded: ok, verdict unknown; no known verdict."
+        }
+      ],
+      "known_sources": 0,
+      "supported_sources": 1
+    },
+    "evidence": [
+      {
+        "source": "demo",
+        "status": "ok",
+        "verdict": "unknown",
+        "reasons": [
+          "SIMULATED evidence for UI demonstration only; no provider was queried."
+        ],
+        "facts": {
+          "synthetic": true
+        },
+        "link": null,
+        "observed_at": 1767225600.0,
+        "cached": false,
+        "retry_after": null
+      }
+    ],
+    "false_positive": false
+  },
+  {
+    "ioc": {
+      "type": "cve",
+      "value": "CVE-2099-12345",
+      "context": "A fictional vulnerability identifier is CVE-2099-12345."
+    },
+    "assessment": {
+      "score": null,
+      "verdict": "unknown",
+      "reasons": [
+        "demo: Excluded: ok, verdict unknown; no known verdict.",
+        "demo: SIMULATED evidence for UI demonstration only; no provider was queried.",
+        "No source supplied a known weighted verdict; the score is unknown."
+      ],
+      "contributions": [
+        {
+          "source": "demo",
+          "status": "ok",
+          "verdict": "unknown",
+          "weight": 1.0,
+          "points": null,
+          "explanation": "Excluded: ok, verdict unknown; no known verdict."
+        }
+      ],
+      "known_sources": 0,
+      "supported_sources": 1
+    },
+    "evidence": [
+      {
+        "source": "demo",
+        "status": "ok",
+        "verdict": "unknown",
+        "reasons": [
+          "SIMULATED evidence for UI demonstration only; no provider was queried."
+        ],
+        "facts": {
+          "synthetic": true
+        },
+        "link": null,
+        "observed_at": 1767225600.0,
+        "cached": false,
+        "retry_after": null
+      }
+    ],
+    "false_positive": false
+  }
+]

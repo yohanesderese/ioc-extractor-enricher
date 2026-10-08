@@ -1,0 +1,252 @@
+{
+    "type": "bundle",
+    "id": "bundle--7d98ecae-68a4-40c2-a291-7077dec89002",
+    "objects": [
+        {
+            "type": "url",
+            "spec_version": "2.1",
+            "id": "url--06a0a6d2-57ea-5350-b067-63454566cd17",
+            "value": "https://alpha.example.com/download"
+        },
+        {
+            "type": "note",
+            "spec_version": "2.1",
+            "id": "note--dc7227f0-7a8f-454c-9ab8-a78c932c2d66",
+            "created": "2026-10-08T19:35:30.465201Z",
+            "modified": "2026-10-08T19:35:30.465201Z",
+            "content": "{\"ioc\": {\"type\": \"url\", \"value\": \"https://alpha.example.com/download\", \"context\": \"The simulated alert references alpha[.]example[.]com and hxxps[:]//alpha[.]example[.]com/download.\"}, \"assessment\": {\"score\": null, \"verdict\": \"unknown\", \"reasons\": [\"demo: Excluded: ok, verdict unknown; no known verdict.\", \"demo: SIMULATED evidence for UI demonstration only; no provider was queried.\", \"No source supplied a known weighted verdict; the score is unknown.\"], \"contributions\": [{\"source\": \"demo\", \"status\": \"ok\", \"verdict\": \"unknown\", \"weight\": 1.0, \"points\": null, \"explanation\": \"Excluded: ok, verdict unknown; no known verdict.\"}], \"known_sources\": 0, \"supported_sources\": 1}, \"evidence\": [{\"source\": \"demo\", \"status\": \"ok\", \"verdict\": \"unknown\", \"reasons\": [\"SIMULATED evidence for UI demonstration only; no provider was queried.\"], \"facts\": {\"synthetic\": true}, \"link\": null, \"observed_at\": 1767225600.0, \"cached\": false, \"retry_after\": null}], \"false_positive\": false}",
+            "object_refs": [
+                "url--06a0a6d2-57ea-5350-b067-63454566cd17"
+            ]
+        },
+        {
+            "type": "domain-name",
+            "spec_version": "2.1",
+            "id": "domain-name--3bedd32f-cbfa-5c44-854f-e8e0f062e3ae",
+            "value": "alpha.example.com"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--a7048771-4e24-4f1f-9e5d-9092f6e22548",
+            "created": "2026-10-08T19:35:30.465201Z",
+            "modified": "2026-10-08T19:35:30.465201Z",
+            "name": "domain: alpha.example.com",
+            "description": "Automated assessment; consult the attached evidence note.",
+            "pattern": "[domain-name:value = 'alpha.example.com']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-10-08T19:35:30.465201Z"
+        },
+        {
+            "type": "note",
+            "spec_version": "2.1",
+            "id": "note--175b5548-b655-4f71-9c23-4ee3044c1e9f",
+            "created": "2026-10-08T19:35:30.465201Z",
+            "modified": "2026-10-08T19:35:30.465201Z",
+            "content": "{\"ioc\": {\"type\": \"domain\", \"value\": \"alpha.example.com\", \"context\": \"The simulated alert references alpha[.]example[.]com and hxxps[:]//alpha[.]example[.]com/download.\"}, \"assessment\": {\"score\": 100, \"verdict\": \"malicious\", \"reasons\": [\"demo: Included: malicious = 100 points, weight 1.\", \"demo: SIMULATED evidence for UI demonstration only; no provider was queried.\", \"Weighted mean of 1 known source verdicts: 100/100.\", \"Malicious threshold: 75. Any remaining positive risk stays suspicious.\"], \"contributions\": [{\"source\": \"demo\", \"status\": \"ok\", \"verdict\": \"malicious\", \"weight\": 1.0, \"points\": 100, \"explanation\": \"Included: malicious = 100 points, weight 1.\"}], \"known_sources\": 1, \"supported_sources\": 1}, \"evidence\": [{\"source\": \"demo\", \"status\": \"ok\", \"verdict\": \"malicious\", \"reasons\": [\"SIMULATED evidence for UI demonstration only; no provider was queried.\"], \"facts\": {\"synthetic\": true}, \"link\": null, \"observed_at\": 1767225600.0, \"cached\": false, \"retry_after\": null}], \"false_positive\": false}",
+            "object_refs": [
+                "domain-name--3bedd32f-cbfa-5c44-854f-e8e0f062e3ae",
+                "indicator--a7048771-4e24-4f1f-9e5d-9092f6e22548"
+            ]
+        },
+        {
+            "type": "domain-name",
+            "spec_version": "2.1",
+            "id": "domain-name--a298f0fd-3612-50fa-aebd-4c730a3b0470",
+            "value": "gamma.example.com"
+        },
+        {
+            "type": "indicator",
+            "spec_version": "2.1",
+            "id": "indicator--719dd18b-504b-47a7-8cc7-b9217c4f9a49",
+            "created": "2026-10-08T19:35:30.465201Z",
+            "modified": "2026-10-08T19:35:30.465201Z",
+            "name": "domain: gamma.example.com",
+            "description": "Automated assessment; consult the attached evidence note.",
+            "pattern": "[domain-name:value = 'gamma.example.com']",
+            "pattern_type": "stix",
+            "pattern_version": "2.1",
+            "valid_from": "2026-10-08T19:35:30.465201Z"
+        },
+        {
+            "type": "note",
+            "spec_version": "2.1",
+            "id": "note--07310e91-4acc-422d-8c40-460c88b660e1",
+            "created": "2026-10-08T19:35:30.465201Z",
+            "modified": "2026-10-08T19:35:30.465201Z",
+            "content": "{\"ioc\": {\"type\": \"domain\", \"value\": \"gamma.example.com\", \"context\": \"A second simulated signal references gamma[.]example[.]com.\"}, \"assessment\": {\"score\": 50, \"verdict\": \"suspicious\", \"reasons\": [\"demo: Included: suspicious = 50 points, weight 1.\", \"demo: SIMULATED evidence for UI demonstration only; no provider was queried.\", \"Weighted mean of 1 known source verdicts: 50/100.\", \"Malicious threshold: 75. Any remaining positive risk stays suspicious.\"], \"contributions\": [{\"source\": \"demo\", \"status\": \"ok\", \"verdict\": \"suspicious\", \"weight\": 1.0, \"points\": 50, \"explanation\": \"Included: suspicious = 50 points, weight 1.\"}], \"known_sources\": 1, \"supported_sources\": 1}, \"evidence\": [{\"source\": \"demo\", \"status\": \"ok\", \"verdict\": \"suspicious\", \"reasons\": [\"SIMULATED evidence for UI demonstration only; no provider was queried.\"], \"facts\": {\"synthetic\": true}, \"link\": null, \"observed_at\": 1767225600.0, \"cached\": false, \"retry_after\": null}], \"false_positive\": false}",
+            "object_refs": [
+                "domain-name--a298f0fd-3612-50fa-aebd-4c730a3b0470",
+                "indicator--719dd18b-504b-47a7-8cc7-b9217c4f9a49"
+            ]
+        },
+        {
+            "type": "domain-name",
+            "spec_version": "2.1",
+            "id": "domain-name--0dadc210-6445-5ad2-abc2-b1e7d346279b",
+            "value": "beta.example.org"
+        },
+        {
+            "type": "note",
+            "spec_version": "2.1",
+            "id": "note--f22822a4-265f-45e7-a634-5ea0dce3c645",
+            "created": "2026-10-08T19:35:30.465201Z",
+            "modified": "2026-10-08T19:35:30.465201Z",
+            "content": "{\"ioc\": {\"type\": \"domain\", \"value\": \"beta.example.org\", \"context\": \"The exercise labels beta[.]example[.]org as benign solely to demonstrate a clean card.\"}, \"assessment\": {\"score\": 0, \"verdict\": \"clean\", \"reasons\": [\"demo: Included: clean = 0 points, weight 1.\", \"demo: SIMULATED evidence for UI demonstration only; no provider was queried.\", \"Weighted mean of 1 known source verdicts: 0/100.\", \"Malicious threshold: 75. Any remaining positive risk stays suspicious.\"], \"contributions\": [{\"source\": \"demo\", \"status\": \"ok\", \"verdict\": \"clean\", \"weight\": 1.0, \"points\": 0, \"explanation\": \"Included: clean = 0 points, weight 1.\"}], \"known_sources\": 1, \"supported_sources\": 1}, \"evidence\": [{\"source\": \"demo\", \"status\": \"ok\", \"verdict\": \"clean\", \"reasons\": [\"SIMULATED evidence for UI demonstration only; no provider was queried.\"], \"facts\": {\"synthetic\": true}, \"link\": null, \"observed_at\": 1767225600.0, \"cached\": false, \"retry_after\": null}], \"false_positive\": false}",
+            "object_refs": [
+                "domain-name--0dadc210-6445-5ad2-abc2-b1e7d346279b"
+            ]
+        },
+        {
+            "type": "email-addr",
+            "spec_version": "2.1",
+            "id": "email-addr--b264eee2-2036-58f4-900f-9c1346783662",
+            "value": "analyst@example.net"
+        },
+        {
+            "type": "note",
+            "spec_version": "2.1",
+            "id": "note--9daeb012-e4df-43ad-8299-0827713734ec",
+            "created": "2026-10-08T19:35:30.465201Z",
+            "modified": "2026-10-08T19:35:30.465201Z",
+            "content": "{\"ioc\": {\"type\": \"email\", \"value\": \"analyst@example.net\", \"context\": \"A contact artifact is analyst[at]example[.]net.\"}, \"assessment\": {\"score\": null, \"verdict\": \"unknown\", \"reasons\": [\"demo: Excluded: ok, verdict unknown; no known verdict.\", \"demo: SIMULATED evidence for UI demonstration only; no provider was queried.\", \"No source supplied a known weighted verdict; the score is unknown.\"], \"contributions\": [{\"source\": \"demo\", \"status\": \"ok\", \"verdict\": \"unknown\", \"weight\": 1.0, \"points\": null, \"explanation\": \"Excluded: ok, verdict unknown; no known verdict.\"}], \"known_sources\": 0, \"supported_sources\": 1}, \"evidence\": [{\"source\": \"demo\", \"status\": \"ok\", \"verdict\": \"unknown\", \"reasons\": [\"SIMULATED evidence for UI demonstration only; no provider was queried.\"], \"facts\": {\"synthetic\": true}, \"link\": null, \"observed_at\": 1767225600.0, \"cached\": false, \"retry_after\": null}], \"false_positive\": false}",
+            "object_refs": [
+                "email-addr--b264eee2-2036-58f4-900f-9c1346783662"
+            ]
+        },
+        {
+            "type": "domain-name",
+            "spec_version": "2.1",
+            "id": "domain-name--8d445db5-71d7-5c41-be24-5649e641fb61",
+            "value": "example.net"
+        },
+        {
+            "type": "note",
+            "spec_version": "2.1",
+            "id": "note--b514928d-19a1-43df-ba3a-c24cd41f5638",
+            "created": "2026-10-08T19:35:30.465201Z",
+            "modified": "2026-10-08T19:35:30.465201Z",
+            "content": "{\"ioc\": {\"type\": \"domain\", \"value\": \"example.net\", \"context\": \"A contact artifact is analyst[at]example[.]net.\"}, \"assessment\": {\"score\": null, \"verdict\": \"unknown\", \"reasons\": [\"demo: Excluded: ok, verdict unknown; no known verdict.\", \"demo: SIMULATED evidence for UI demonstration only; no provider was queried.\", \"No source supplied a known weighted verdict; the score is unknown.\"], \"contributions\": [{\"source\": \"demo\", \"status\": \"ok\", \"verdict\": \"unknown\", \"weight\": 1.0, \"points\": null, \"explanation\": \"Excluded: ok, verdict unknown; no known verdict.\"}], \"known_sources\": 0, \"supported_sources\": 1}, \"evidence\": [{\"source\": \"demo\", \"status\": \"ok\", \"verdict\": \"unknown\", \"reasons\": [\"SIMULATED evidence for UI demonstration only; no provider was queried.\"], \"facts\": {\"synthetic\": true}, \"link\": null, \"observed_at\": 1767225600.0, \"cached\": false, \"retry_after\": null}], \"false_positive\": false}",
+            "object_refs": [
+                "domain-name--8d445db5-71d7-5c41-be24-5649e641fb61"
+            ]
+        },
+        {
+            "type": "ipv6-addr",
+            "spec_version": "2.1",
+            "id": "ipv6-addr--b7b5453e-3c50-5e2e-a8f9-538df72abf4a",
+            "value": "2001:db8::10"
+        },
+        {
+            "type": "note",
+            "spec_version": "2.1",
+            "id": "note--9d4880cf-5bbc-41d7-a278-a66052feeffa",
+            "created": "2026-10-08T19:35:30.465201Z",
+            "modified": "2026-10-08T19:35:30.465201Z",
+            "content": "{\"ioc\": {\"type\": \"ipv6\", \"value\": \"2001:db8::10\", \"context\": \"Documentation addresses 192.0.2.10 and 2001:db8::10 are included only when reserved IPs are enabled.\"}, \"assessment\": {\"score\": null, \"verdict\": \"unknown\", \"reasons\": [\"demo: Excluded: ok, verdict unknown; no known verdict.\", \"demo: SIMULATED evidence for UI demonstration only; no provider was queried.\", \"No source supplied a known weighted verdict; the score is unknown.\"], \"contributions\": [{\"source\": \"demo\", \"status\": \"ok\", \"verdict\": \"unknown\", \"weight\": 1.0, \"points\": null, \"explanation\": \"Excluded: ok, verdict unknown; no known verdict.\"}], \"known_sources\": 0, \"supported_sources\": 1}, \"evidence\": [{\"source\": \"demo\", \"status\": \"ok\", \"verdict\": \"unknown\", \"reasons\": [\"SIMULATED evidence for UI demonstration only; no provider was queried.\"], \"facts\": {\"synthetic\": true}, \"link\": null, \"observed_at\": 1767225600.0, \"cached\": false, \"retry_after\": null}], \"false_positive\": false}",
+            "object_refs": [
+                "ipv6-addr--b7b5453e-3c50-5e2e-a8f9-538df72abf4a"
+            ]
+        },
+        {
+            "type": "ipv4-addr",
+            "spec_version": "2.1",
+            "id": "ipv4-addr--a2fbe2c6-009e-52e0-b452-90b71e3109c2",
+            "value": "192.0.2.10"
+        },
+        {
+            "type": "note",
+            "spec_version": "2.1",
+            "id": "note--e5629a05-ce22-473c-b565-f084d2986a7c",
+            "created": "2026-10-08T19:35:30.465201Z",
+            "modified": "2026-10-08T19:35:30.465201Z",
+            "content": "{\"ioc\": {\"type\": \"ipv4\", \"value\": \"192.0.2.10\", \"context\": \"Documentation addresses 192.0.2.10 and 2001:db8::10 are included only when reserved IPs are enabled.\"}, \"assessment\": {\"score\": null, \"verdict\": \"unknown\", \"reasons\": [\"demo: Excluded: ok, verdict unknown; no known verdict.\", \"demo: SIMULATED evidence for UI demonstration only; no provider was queried.\", \"No source supplied a known weighted verdict; the score is unknown.\"], \"contributions\": [{\"source\": \"demo\", \"status\": \"ok\", \"verdict\": \"unknown\", \"weight\": 1.0, \"points\": null, \"explanation\": \"Excluded: ok, verdict unknown; no known verdict.\"}], \"known_sources\": 0, \"supported_sources\": 1}, \"evidence\": [{\"source\": \"demo\", \"status\": \"ok\", \"verdict\": \"unknown\", \"reasons\": [\"SIMULATED evidence for UI demonstration only; no provider was queried.\"], \"facts\": {\"synthetic\": true}, \"link\": null, \"observed_at\": 1767225600.0, \"cached\": false, \"retry_after\": null}], \"false_positive\": false}",
+            "object_refs": [
+                "ipv4-addr--a2fbe2c6-009e-52e0-b452-90b71e3109c2"
+            ]
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--5e2c1e38-1672-579d-beda-536a486bf06f",
+            "hashes": {
+                "MD5": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+            }
+        },
+        {
+            "type": "note",
+            "spec_version": "2.1",
+            "id": "note--f149711b-650b-422c-bfa1-44a7915277ae",
+            "created": "2026-10-08T19:35:30.465201Z",
+            "modified": "2026-10-08T19:35:30.465201Z",
+            "content": "{\"ioc\": {\"type\": \"md5\", \"value\": \"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\", \"context\": \"Synthetic MD5: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa\"}, \"assessment\": {\"score\": null, \"verdict\": \"unknown\", \"reasons\": [\"demo: Excluded: ok, verdict unknown; no known verdict.\", \"demo: SIMULATED evidence for UI demonstration only; no provider was queried.\", \"No source supplied a known weighted verdict; the score is unknown.\"], \"contributions\": [{\"source\": \"demo\", \"status\": \"ok\", \"verdict\": \"unknown\", \"weight\": 1.0, \"points\": null, \"explanation\": \"Excluded: ok, verdict unknown; no known verdict.\"}], \"known_sources\": 0, \"supported_sources\": 1}, \"evidence\": [{\"source\": \"demo\", \"status\": \"ok\", \"verdict\": \"unknown\", \"reasons\": [\"SIMULATED evidence for UI demonstration only; no provider was queried.\"], \"facts\": {\"synthetic\": true}, \"link\": null, \"observed_at\": 1767225600.0, \"cached\": false, \"retry_after\": null}], \"false_positive\": false}",
+            "object_refs": [
+                "file--5e2c1e38-1672-579d-beda-536a486bf06f"
+            ]
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--a3cdf63a-5e8d-5e56-a0bf-1442cb7c8d0a",
+            "hashes": {
+                "SHA-1": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+            }
+        },
+        {
+            "type": "note",
+            "spec_version": "2.1",
+            "id": "note--3b8f1d5c-3534-45d7-b4d2-0387c490ec4f",
+            "created": "2026-10-08T19:35:30.465201Z",
+            "modified": "2026-10-08T19:35:30.465201Z",
+            "content": "{\"ioc\": {\"type\": \"sha1\", \"value\": \"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\", \"context\": \"Synthetic SHA1: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb\"}, \"assessment\": {\"score\": null, \"verdict\": \"unknown\", \"reasons\": [\"demo: Excluded: ok, verdict unknown; no known verdict.\", \"demo: SIMULATED evidence for UI demonstration only; no provider was queried.\", \"No source supplied a known weighted verdict; the score is unknown.\"], \"contributions\": [{\"source\": \"demo\", \"status\": \"ok\", \"verdict\": \"unknown\", \"weight\": 1.0, \"points\": null, \"explanation\": \"Excluded: ok, verdict unknown; no known verdict.\"}], \"known_sources\": 0, \"supported_sources\": 1}, \"evidence\": [{\"source\": \"demo\", \"status\": \"ok\", \"verdict\": \"unknown\", \"reasons\": [\"SIMULATED evidence for UI demonstration only; no provider was queried.\"], \"facts\": {\"synthetic\": true}, \"link\": null, \"observed_at\": 1767225600.0, \"cached\": false, \"retry_after\": null}], \"false_positive\": false}",
+            "object_refs": [
+                "file--a3cdf63a-5e8d-5e56-a0bf-1442cb7c8d0a"
+            ]
+        },
+        {
+            "type": "file",
+            "spec_version": "2.1",
+            "id": "file--00f00536-b52a-550f-80ea-d38e505b5ca5",
+            "hashes": {
+                "SHA-256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+            }
+        },
+        {
+            "type": "note",
+            "spec_version": "2.1",
+            "id": "note--67625546-31e3-4274-8922-46bdd01ddfa8",
+            "created": "2026-10-08T19:35:30.465201Z",
+            "modified": "2026-10-08T19:35:30.465201Z",
+            "content": "{\"ioc\": {\"type\": \"sha256\", \"value\": \"cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\", \"context\": \"Synthetic SHA256: cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc\"}, \"assessment\": {\"score\": null, \"verdict\": \"unknown\", \"reasons\": [\"demo: Excluded: ok, verdict unknown; no known verdict.\", \"demo: SIMULATED evidence for UI demonstration only; no provider was queried.\", \"No source supplied a known weighted verdict; the score is unknown.\"], \"contributions\": [{\"source\": \"demo\", \"status\": \"ok\", \"verdict\": \"unknown\", \"weight\": 1.0, \"points\": null, \"explanation\": \"Excluded: ok, verdict unknown; no known verdict.\"}], \"known_sources\": 0, \"supported_sources\": 1}, \"evidence\": [{\"source\": \"demo\", \"status\": \"ok\", \"verdict\": \"unknown\", \"reasons\": [\"SIMULATED evidence for UI demonstration only; no provider was queried.\"], \"facts\": {\"synthetic\": true}, \"link\": null, \"observed_at\": 1767225600.0, \"cached\": false, \"retry_after\": null}], \"false_positive\": false}",
+            "object_refs": [
+                "file--00f00536-b52a-550f-80ea-d38e505b5ca5"
+            ]
+        },
+        {
+            "type": "vulnerability",
+            "spec_version": "2.1",
+            "id": "vulnerability--67c9344f-10bd-4f98-8061-445bdde8291f",
+            "created": "2026-10-08T19:35:30.477306Z",
+            "modified": "2026-10-08T19:35:30.477306Z",
+            "name": "CVE-2099-12345",
+            "external_references": [
+                {
+                    "source_name": "cve",
+                    "external_id": "CVE-2099-12345"
+                }
+            ]
+        },
+        {
+            "type": "note",
+            "spec_version": "2.1",
+            "id": "note--4c01ce6c-2795-4779-b6c3-13edbf926984",
+            "created": "2026-10-08T19:35:30.465201Z",
+            "modified": "2026-10-08T19:35:30.465201Z",
+            "content": "{\"ioc\": {\"type\": \"cve\", \"value\": \"CVE-2099-12345\", \"context\": \"A fictional vulnerability identifier is CVE-2099-12345.\"}, \"assessment\": {\"score\": null, \"verdict\": \"unknown\", \"reasons\": [\"demo: Excluded: ok, verdict unknown; no known verdict.\", \"demo: SIMULATED evidence for UI demonstration only; no provider was queried.\", \"No source supplied a known weighted verdict; the score is unknown.\"], \"contributions\": [{\"source\": \"demo\", \"status\": \"ok\", \"verdict\": \"unknown\", \"weight\": 1.0, \"points\": null, \"explanation\": \"Excluded: ok, verdict unknown; no known verdict.\"}], \"known_sources\": 0, \"supported_sources\": 1}, \"evidence\": [{\"source\": \"demo\", \"status\": \"ok\", \"verdict\": \"unknown\", \"reasons\": [\"SIMULATED evidence for UI demonstration only; no provider was queried.\"], \"facts\": {\"synthetic\": true}, \"link\": null, \"observed_at\": 1767225600.0, \"cached\": false, \"retry_after\": null}], \"false_positive\": false}",
+            "object_refs": [
+                "vulnerability--67c9344f-10bd-4f98-8061-445bdde8291f"
+            ]
+        }
+    ]
+}
