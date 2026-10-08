@@ -1,0 +1,28 @@
+services:
+  workspace:
+    build: .
+    image: iocdesk:local
+    ports:
+      - "127.0.0.1:${IOCDESK_PORT:-8000}:8000"
+    environment:
+      # Pass only explicitly exported host variables; credentials never enter the image.
+      VT_API_KEY: ${VT_API_KEY:-}
+      ABUSEIPDB_API_KEY: ${ABUSEIPDB_API_KEY:-}
+      OTX_API_KEY: ${OTX_API_KEY:-}
+      ABUSECH_AUTH_KEY: ${ABUSECH_AUTH_KEY:-}
+      GREYNOISE_API_KEY: ${GREYNOISE_API_KEY:-}
+      MISP_URL: ${MISP_URL:-}
+      MISP_API_KEY: ${MISP_API_KEY:-}
+    volumes:
+      - evidence-cache:/data
+    read_only: true
+    tmpfs:
+      - /tmp:rw,noexec,nosuid,size=16m
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    init: true
+
+volumes:
+  evidence-cache:

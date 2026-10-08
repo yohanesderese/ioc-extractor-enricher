@@ -1,0 +1,17 @@
+# Only package inputs enter the build context, never local credentials or history.
+**
+!Dockerfile
+!pyproject.toml
+!README.md
+!LICENSE
+!src/
+!src/**
+# Keep accidental local/generated files out even if placed inside src.
+**/__pycache__/
+**/*.pyc
+**/.env
+**/.env.*
+**/*.db
+**/*.db-*
+**/*.sqlite*
+**/*.egg-info/

@@ -1,0 +1,12 @@
+SYNTHETIC TRAINING EXERCISE — no real incident or reputation claims.
+All verdicts in the offline demo are fabricated. Keep enrichment unchecked when uploading this file.
+
+The simulated alert references alpha[.]example[.]com and hxxps[:]//alpha[.]example[.]com/download.
+A second simulated signal references gamma[.]example[.]com.
+The exercise labels beta[.]example[.]org as benign solely to demonstrate a clean card.
+A contact artifact is analyst[at]example[.]net.
+Documentation addresses 192.0.2.10 and 2001:db8::10 are included only when reserved IPs are enabled.
+Synthetic MD5: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+Synthetic SHA1: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb
+Synthetic SHA256: cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc
+A fictional vulnerability identifier is CVE-2099-12345.

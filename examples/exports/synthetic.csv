@@ -1,0 +1,40 @@
+type,value,score,verdict,context,false_positive,reasons,evidence
+url,https://alpha.example.com/download,,unknown,The simulated alert references alpha[.]example[.]com and hxxps[:]//alpha[.]example[.]com/download.,False,"demo: Excluded: ok, verdict unknown; no known verdict.
+demo: SIMULATED evidence for UI demonstration only; no provider was queried.
+No source supplied a known weighted verdict; the score is unknown.","[{""source"": ""demo"", ""status"": ""ok"", ""verdict"": ""unknown"", ""reasons"": [""SIMULATED evidence for UI demonstration only; no provider was queried.""], ""facts"": {""synthetic"": true}, ""link"": null, ""observed_at"": 1767225600.0, ""cached"": false, ""retry_after"": null}]"
+domain,alpha.example.com,100,malicious,The simulated alert references alpha[.]example[.]com and hxxps[:]//alpha[.]example[.]com/download.,False,"demo: Included: malicious = 100 points, weight 1.
+demo: SIMULATED evidence for UI demonstration only; no provider was queried.
+Weighted mean of 1 known source verdicts: 100/100.
+Malicious threshold: 75. Any remaining positive risk stays suspicious.","[{""source"": ""demo"", ""status"": ""ok"", ""verdict"": ""malicious"", ""reasons"": [""SIMULATED evidence for UI demonstration only; no provider was queried.""], ""facts"": {""synthetic"": true}, ""link"": null, ""observed_at"": 1767225600.0, ""cached"": false, ""retry_after"": null}]"
+domain,gamma.example.com,50,suspicious,A second simulated signal references gamma[.]example[.]com.,False,"demo: Included: suspicious = 50 points, weight 1.
+demo: SIMULATED evidence for UI demonstration only; no provider was queried.
+Weighted mean of 1 known source verdicts: 50/100.
+Malicious threshold: 75. Any remaining positive risk stays suspicious.","[{""source"": ""demo"", ""status"": ""ok"", ""verdict"": ""suspicious"", ""reasons"": [""SIMULATED evidence for UI demonstration only; no provider was queried.""], ""facts"": {""synthetic"": true}, ""link"": null, ""observed_at"": 1767225600.0, ""cached"": false, ""retry_after"": null}]"
+domain,beta.example.org,0,clean,The exercise labels beta[.]example[.]org as benign solely to demonstrate a clean card.,False,"demo: Included: clean = 0 points, weight 1.
+demo: SIMULATED evidence for UI demonstration only; no provider was queried.
+Weighted mean of 1 known source verdicts: 0/100.
+Malicious threshold: 75. Any remaining positive risk stays suspicious.","[{""source"": ""demo"", ""status"": ""ok"", ""verdict"": ""clean"", ""reasons"": [""SIMULATED evidence for UI demonstration only; no provider was queried.""], ""facts"": {""synthetic"": true}, ""link"": null, ""observed_at"": 1767225600.0, ""cached"": false, ""retry_after"": null}]"
+email,analyst@example.net,,unknown,A contact artifact is analyst[at]example[.]net.,False,"demo: Excluded: ok, verdict unknown; no known verdict.
+demo: SIMULATED evidence for UI demonstration only; no provider was queried.
+No source supplied a known weighted verdict; the score is unknown.","[{""source"": ""demo"", ""status"": ""ok"", ""verdict"": ""unknown"", ""reasons"": [""SIMULATED evidence for UI demonstration only; no provider was queried.""], ""facts"": {""synthetic"": true}, ""link"": null, ""observed_at"": 1767225600.0, ""cached"": false, ""retry_after"": null}]"
+domain,example.net,,unknown,A contact artifact is analyst[at]example[.]net.,False,"demo: Excluded: ok, verdict unknown; no known verdict.
+demo: SIMULATED evidence for UI demonstration only; no provider was queried.
+No source supplied a known weighted verdict; the score is unknown.","[{""source"": ""demo"", ""status"": ""ok"", ""verdict"": ""unknown"", ""reasons"": [""SIMULATED evidence for UI demonstration only; no provider was queried.""], ""facts"": {""synthetic"": true}, ""link"": null, ""observed_at"": 1767225600.0, ""cached"": false, ""retry_after"": null}]"
+ipv6,2001:db8::10,,unknown,Documentation addresses 192.0.2.10 and 2001:db8::10 are included only when reserved IPs are enabled.,False,"demo: Excluded: ok, verdict unknown; no known verdict.
+demo: SIMULATED evidence for UI demonstration only; no provider was queried.
+No source supplied a known weighted verdict; the score is unknown.","[{""source"": ""demo"", ""status"": ""ok"", ""verdict"": ""unknown"", ""reasons"": [""SIMULATED evidence for UI demonstration only; no provider was queried.""], ""facts"": {""synthetic"": true}, ""link"": null, ""observed_at"": 1767225600.0, ""cached"": false, ""retry_after"": null}]"
+ipv4,192.0.2.10,,unknown,Documentation addresses 192.0.2.10 and 2001:db8::10 are included only when reserved IPs are enabled.,False,"demo: Excluded: ok, verdict unknown; no known verdict.
+demo: SIMULATED evidence for UI demonstration only; no provider was queried.
+No source supplied a known weighted verdict; the score is unknown.","[{""source"": ""demo"", ""status"": ""ok"", ""verdict"": ""unknown"", ""reasons"": [""SIMULATED evidence for UI demonstration only; no provider was queried.""], ""facts"": {""synthetic"": true}, ""link"": null, ""observed_at"": 1767225600.0, ""cached"": false, ""retry_after"": null}]"
+md5,aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa,,unknown,Synthetic MD5: aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa,False,"demo: Excluded: ok, verdict unknown; no known verdict.
+demo: SIMULATED evidence for UI demonstration only; no provider was queried.
+No source supplied a known weighted verdict; the score is unknown.","[{""source"": ""demo"", ""status"": ""ok"", ""verdict"": ""unknown"", ""reasons"": [""SIMULATED evidence for UI demonstration only; no provider was queried.""], ""facts"": {""synthetic"": true}, ""link"": null, ""observed_at"": 1767225600.0, ""cached"": false, ""retry_after"": null}]"
+sha1,bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb,,unknown,Synthetic SHA1: bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb,False,"demo: Excluded: ok, verdict unknown; no known verdict.
+demo: SIMULATED evidence for UI demonstration only; no provider was queried.
+No source supplied a known weighted verdict; the score is unknown.","[{""source"": ""demo"", ""status"": ""ok"", ""verdict"": ""unknown"", ""reasons"": [""SIMULATED evidence for UI demonstration only; no provider was queried.""], ""facts"": {""synthetic"": true}, ""link"": null, ""observed_at"": 1767225600.0, ""cached"": false, ""retry_after"": null}]"
+sha256,cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc,,unknown,Synthetic SHA256: cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc,False,"demo: Excluded: ok, verdict unknown; no known verdict.
+demo: SIMULATED evidence for UI demonstration only; no provider was queried.
+No source supplied a known weighted verdict; the score is unknown.","[{""source"": ""demo"", ""status"": ""ok"", ""verdict"": ""unknown"", ""reasons"": [""SIMULATED evidence for UI demonstration only; no provider was queried.""], ""facts"": {""synthetic"": true}, ""link"": null, ""observed_at"": 1767225600.0, ""cached"": false, ""retry_after"": null}]"
+cve,CVE-2099-12345,,unknown,A fictional vulnerability identifier is CVE-2099-12345.,False,"demo: Excluded: ok, verdict unknown; no known verdict.
+demo: SIMULATED evidence for UI demonstration only; no provider was queried.
+No source supplied a known weighted verdict; the score is unknown.","[{""source"": ""demo"", ""status"": ""ok"", ""verdict"": ""unknown"", ""reasons"": [""SIMULATED evidence for UI demonstration only; no provider was queried.""], ""facts"": {""synthetic"": true}, ""link"": null, ""observed_at"": 1767225600.0, ""cached"": false, ""retry_after"": null}]"

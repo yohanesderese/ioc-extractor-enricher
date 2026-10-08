@@ -1,0 +1,96 @@
+name: CI
+
+on:
+  push:
+    branches: [main, 'feature/**']
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  python:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ['3.11', '3.12', '3.13']
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+          cache-dependency-path: pyproject.toml
+      - name: Install project and development tools
+        run: python -m pip install -e '.[dev]'
+      - name: Lint
+        run: ruff check .
+      - name: Test with synthetic data and mocked HTTP
+        run: pytest -q
+      - name: Build and validate installed wheel
+        run: |
+          python -m pip wheel --no-deps --wheel-dir dist .
+          python -m venv /tmp/iocdesk-wheel
+          /tmp/iocdesk-wheel/bin/python -m pip install dist/*.whl
+          cd /tmp
+          /tmp/iocdesk-wheel/bin/python "$GITHUB_WORKSPACE/scripts/check_package.py"
+  docker:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - name: Validate Compose configuration
+        run: docker compose --env-file /dev/null config --quiet
+      - name: Build runtime image
+        run: docker build --tag iocdesk:ci --tag iocdesk:local .
+      - name: Check runtime packaging and offline extraction
+        run: |
+          docker run --rm --network none --read-only --tmpfs /tmp iocdesk:ci python -c 'import os; assert os.getuid() == 10001'
+          docker run --rm --network none --read-only --tmpfs /tmp --mount "type=bind,src=$PWD/scripts/check_package.py,dst=/tmp/check_package.py,readonly" iocdesk:ci python /tmp/check_package.py
+      - name: Check web startup and cache persistence
+        run: |
+          export IOCDESK_PORT=58099
+          docker compose --env-file /dev/null up --detach --no-build --wait --wait-timeout 60
+          curl --fail --silent --show-error http://127.0.0.1:58099/openapi.json --output /dev/null
+          docker compose --env-file /dev/null exec -T workspace python -c 'from pathlib import Path; assert Path("/data/enrichment.db").is_file()'
+          docker compose --env-file /dev/null exec -T workspace python - <<'PY'
+          import asyncio
+          from ioc_extractor_enricher.cache import SQLiteCache
+          from ioc_extractor_enricher.enrichment import EnrichmentResult
+          from ioc_extractor_enricher.models import IOC
+          async def seed():
+              async with SQLiteCache('/data/enrichment.db') as cache:
+                  await cache.put(IOC('domain', 'cache-check.example.com', ''),
+                                  EnrichmentResult('ci_demo', 'ok', facts={'synthetic': True}))
+          asyncio.run(seed())
+          PY
+          docker compose --env-file /dev/null up --detach --force-recreate --no-build --wait --wait-timeout 60
+          docker compose --env-file /dev/null exec -T workspace python - <<'PY'
+          import asyncio
+          from ioc_extractor_enricher.cache import SQLiteCache
+          from ioc_extractor_enricher.models import IOC
+          async def verify():
+              async with SQLiteCache('/data/enrichment.db') as cache:
+                  result = await cache.get('ci_demo', IOC('domain', 'cache-check.example.com', ''))
+                  assert result and result.cached and result.facts == {'synthetic': True}
+          asyncio.run(verify())
+          PY
+        env:
+          COMPOSE_PROJECT_NAME: iocdesk-ci
+      - name: Clean up validation containers
+        if: always()
+        run: docker compose --env-file /dev/null down --volumes
+        env:
+          COMPOSE_PROJECT_NAME: iocdesk-ci
